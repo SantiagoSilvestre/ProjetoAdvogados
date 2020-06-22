@@ -546,7 +546,7 @@ public class Formulario extends javax.swing.JFrame {
 
         lb_acao2.setText("Ação:");
 
-        comboPesquisa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Código", "Processo", "Autor", "Reu", "Fórum", "Vara", "Contato", "RG", "Endereço", "Ação", "Matricula", "Data de Nascimento", "CPF", "Local da Prisão" }));
+        comboPesquisa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Código", "Processo", "Autor", "Réu", "Fórum", "Vara", "Contato", "RG", "Endereço", "Ação", "Matricula", "Data de Nascimento", "CPF", "Local da Prisão" }));
         comboPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboPesquisaActionPerformed(evt);
@@ -1083,16 +1083,15 @@ public class Formulario extends javax.swing.JFrame {
         String clausura = (String) comboPesquisa.getSelectedItem();
         String query = "";
         if ("Código".equals(clausura)) {
-          query = "select * from Clientes where "+clausura+" = '"+parametro+ "'";
+                query = "select * from Clientes where "+clausura+" = '"+parametro+ "'";  
         } else {
             query = "select * from Clientes where "+clausura+"  LIKE '%"+parametro+"%' ";
         }
-        //Pesquisa no banco de dados
-        con_base.executa(query);
-        
+        //Pesquisa no banco de dados        
         
         try 
         {
+            boolean b = con_base.executa(query);
             con_base.resultset.first();
             tf_Codigo1.setText(con_base.resultset.getString("Código"));
             tf_Autor1.setText(con_base.resultset.getString("Autor"));
@@ -1112,12 +1111,16 @@ public class Formulario extends javax.swing.JFrame {
             tf_dt_nac1.setText(con_base.resultset.getString("data_nasc"));
             tf_local_prisao1.setText(con_base.resultset.getString("local_prisao"));
             ckNovo1.setSelected(con_base.resultset.getBoolean("novo"));
-            pesquisar.setVisible(true);
-            pesquisar.setBounds(200, 200, 700, 600);
+            if(!b){
+                pesquisar.setVisible(true);
+                pesquisar.setBounds(200, 200, 700, 600);
+            }
+            
         }
         catch(SQLException erro)
         {
-            JOptionPane.showMessageDialog(null,"Não localizou dados " +erro);
+            pesquisar.setVisible(false);
+            JOptionPane.showMessageDialog(null,"Não localizou dados ");
         }
         
         

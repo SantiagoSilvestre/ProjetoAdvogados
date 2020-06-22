@@ -20,7 +20,8 @@ public class Conexao {
     public Statement statement;
     public ResultSet resultset;
     
-    String url = "jdbc:ucanaccess://C:/Users/Santiago/Documents/processo.accdb";
+    //String url = "jdbc:ucanaccess://C:/Users/Santiago/Documents/NetBeansProjects/ProjetoAdvogados/processo.accdb";
+    String url = "jdbc:ucanaccess://././processo.accdb";
     
     public boolean conecta() {
         boolean result = true;
@@ -61,17 +62,19 @@ public class Conexao {
         }
     }
    
-    public void executa(String sql) {
+    public Boolean executa(String sql) {
         try 
         {
             statement = conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             resultset = statement.executeQuery(sql);
+            return false;
         }
         catch (SQLException sqlex)
         {
-            JOptionPane.showConfirmDialog(null, "Não foi possível executar"
-                    + " o comando SQL "+ sqlex + "Sql passado foi "+sql);
+            JOptionPane.showMessageDialog(null, "Não foi possível executar"
+                    + " a busca, verifique os valores informados");
         }
+        return true;
     }
 }
